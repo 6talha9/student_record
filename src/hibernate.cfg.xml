@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE hibernate-mapping PUBLIC  
+"-//Hibernate/Hibernate Mapping DTD 5.0//EN"  
+"http://hibernate.sourceforge.net/hibernate-mapping-5.0.dtd">  
+  
+<hibernate-mapping>  
+
+<class name="model.YearClassDivSubMaster" table="YearClassDivSubMaster">
+<id name="yearClassDivSub">  
+            </id>
+
+</class>
+
+<class name="model.AcademicYear" table="AcademicYear">
+<id name="id" type="int">  <generator class="increment"></generator>
+            </id>
+               <property name="startYear" type="int"></property>
+             <property name="endYear" type="int"></property>
+         <!--  <bag name="classStd" cascade="all">  
+            <key column="stYear"></key>  
+           
+          <one-to-many class="model.ClassStd"/>  
+          </bag>  -->
+           <map name="clasEveryYear" table="clasEveryYear" cascade="all">  
+<key column="strtYear"></key>  
+  <index column="type" type="int"></index> 
+<many-to-many class="model.ClassStd"  column="className"></many-to-many>  
+</map>
+        <!--    <list name="std" cascade="all">  
+          <key column="stYear"></key>  
+          <index column="type"></index>  
+          <one-to-many class="model.ClassStd"/>  
+          </list> -->
+              
+ </class> 
+
+<class name="model.ClassStd" table="ClassStd">
+<id name="Id">  <generator class="increment"></generator>
+            </id>
+              <property name="ClassStdId" type="int"> </property>
+       <!--     <bag name="div" cascade="all">  
+     <key column="ClsStdId"></key>
+          <one-to-many class="model.Division"/>  
+          </bag>  -->   
+          <map name="divPerClass" table="divPerClass" cascade="all">  
+<key column="clasid"></key>  
+  <index column="type" type="int"></index> 
+<many-to-many class="model.Division"  column="Division"></many-to-many>  
+</map>
+            
+ </class> 
+
+
+
+ <class name="model.Division" table="Division">  
+          <id name="Id" > <generator class="increment"></generator>   </id>
+           <!-- <property name="name" not-null="true" unique="true"></property> -->
+           <property name="divId" type="string"> </property>
+        <!--    <bag name="students" cascade="all">  
+         <key column="dvId" ></key>
+          <one-to-many class="model.Student"/>  
+        </bag> -->
+          
+          <!--       <bag name="subjects" cascade="all">  
+      <key column="dvId" ></key>
+          <one-to-many class="model.Subject"/>  
+          </bag> -->
+          
+      <bag name="subjects" table="subjects" cascade="all">  
+     <key column="dvId"></key>  
+      
+  
+     <many-to-many class="model.Subject" column="Sub"/>   
+   </bag>  
+       <bag name="students" table="students" cascade="all">  
+     <key column="dvId"></key>  
+      
+  
+     <many-to-many class="model.Student" column="Stud"/>  
+   </bag>  
+   <!--        <bag name="subjects" table="subjects">  
+     <key column="dvId"></key>  
+     
+     <element column="subject" type="string"></element>  
+   </bag>
+       <bag name="students" table="students">  
+     <key column="dvId"></key>  
+     <element column="student" type="string"></element>  
+   </bag>  -->
+   
+    </class> 
+
+
+<class name="model.Subject" table="subject" >  
+          <id name="id">  <generator class="increment"></generator>  
+            </id>
+            <property name="name"  unique="true" > </property>
+           <!-- <property name="name" not-null="true" unique="true"></property> -->
+           <property name="subjMark" type="int"> </property>
+    
+    </class> 
+ 
+  
+    <class name="model.Student" table="student">  
+          <id name="id">   <generator class="increment"></generator> 
+            </id>
+            
+              <property name="studentsRollNo"  > </property>
+            <property name="name" not-null="true" unique="true"></property> 
+           <map name="markInSubject" table="markInSubject" cascade="all">  
+<key column="studid"></key>  
+<index column="marks" type="int"></index>
+
+<many-to-many class="model.Subject" column="subjectName"></many-to-many>  
+</map>
+ </class>          
+           
+           
+           
+ 
+     
+ 
+
+</hibernate-mapping>
